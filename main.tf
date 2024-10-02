@@ -8,6 +8,10 @@
 data "aws_caller_identity" "current" {}
 data "aws_region" "current" {}
 
+data "aws_codecommit_repository" "gitops_repo" {
+  repository_name = var.codecommit_repo_name
+}
+
 #region CodeBuild
 
 data "aws_iam_policy_document" "assume_role_codebuild" {
@@ -56,9 +60,11 @@ data "aws_iam_policy_document" "codebuild_default_policy" {
       "codecommit:GitPull",
       "codecommit:CreateCommit",
       "codecommit:GitPush",
+      "codecommit:Describe*",
+      "codecommit:List*",
     ]
     resources = [
-      var.codecommit_repo_arn
+      data.aws_codecommit_repository.gitops_repo.arn
     ]
   }
 }
@@ -95,6 +101,12 @@ resource "aws_codebuild_project" "cb_project" {
       name  = "GIT_USERNAME"
       type  = "PLAINTEXT"
       value = var.codebuild_git_user_name
+    }
+
+    environment_variable {
+      name  = "GITOPS_REPO_NAME"
+      type  = "PLAINTEXT"
+      value = data.aws_codecommit_repository.gitops_repo.repository_name
     }
   }
 
@@ -150,15 +162,15 @@ data "aws_iam_policy_document" "lambda_function_policy_document" {
     resources = var.ecr_registry_triggers
   }
 
-    statement {
-      effect = "Allow"
-      actions = [
-        "codebuild:StartBuild"
-      ]
-      resources = [
-        aws_codebuild_project.cb_project.arn
-      ]
-    }
+  statement {
+    effect = "Allow"
+    actions = [
+      "codebuild:StartBuild"
+    ]
+    resources = [
+      aws_codebuild_project.cb_project.arn
+    ]
+  }
 }
 
 resource "aws_iam_role_policy" "trigger_policy" {
@@ -185,7 +197,7 @@ resource "aws_lambda_function" "codebuild_triggerer" {
   runtime       = "python3.9"
   architectures = ["arm64"]
   timeout       = 10
-  memory_size = 256
+  memory_size   = 256
 
   environment {
     variables = {
@@ -213,7 +225,7 @@ resource "aws_cloudwatch_event_rule" "ecr_image_push" {
     source      = ["aws.ecr"]
     detail-type = ["ECR Image Action"]
     # resources   = var.ecr_registry_triggers
-    region      = [data.aws_region.current.name]
+    region = [data.aws_region.current.name]
     detail = {
       action-type = ["PUSH"]
     }
@@ -221,12 +233,12 @@ resource "aws_cloudwatch_event_rule" "ecr_image_push" {
 }
 
 resource "aws_cloudwatch_event_target" "lambda_target" {
-  rule = aws_cloudwatch_event_rule.ecr_image_push.name
+  rule      = aws_cloudwatch_event_rule.ecr_image_push.name
   target_id = var.event_rule_target_id
-  arn = aws_lambda_function.codebuild_triggerer.arn
+  arn       = aws_lambda_function.codebuild_triggerer.arn
 
   retry_policy {
-    maximum_retry_attempts = 3
+    maximum_retry_attempts       = 3
     maximum_event_age_in_seconds = 60
   }
 

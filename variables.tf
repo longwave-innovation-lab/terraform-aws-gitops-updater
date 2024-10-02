@@ -10,19 +10,20 @@ variable "ecr_image_push_rule_name" {
 }
 
 variable "event_rule_target_id" {
-  type = string
-  default = "InvokeLambdaTriggerer"
+  type        = string
+  default     = "InvokeLambdaTriggerer"
   description = "ID of the target for the event rule"
 }
+
 variable "lambda_triggerer_name" {
   type        = string
   default     = "ECRPushListener"
   description = "Name of the lambda function which will trigger the pipeline."
 }
 
-variable "codecommit_repo_arn" {
+variable "codecommit_repo_name" {
   type        = string
-  description = "ARN of the CodeCommit repository which will be updated by the pipeline"
+  description = "Name of the CodeCommit repository which will be updated by the pipeline"
 }
 
 variable "codebuild_project_name" {

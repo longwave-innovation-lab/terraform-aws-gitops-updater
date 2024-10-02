@@ -69,7 +69,7 @@ def lambda_handler(event, context):
             projectName=codebuild_project_name,
             environmentVariablesOverride=[
                 {
-                    'name': 'REPOSITORY_NAME',
+                    'name': 'IMAGE_NAME',
                     'value': repository_name
                 },
                 {
