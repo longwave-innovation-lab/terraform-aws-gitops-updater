@@ -1,6 +1,6 @@
 variable "ecr_registry_triggers" {
   type        = list(string)
-  description = "List of ECR repositories ARN which will trigger the pipeline"
+  description = "List of ECR repositories name which will trigger the pipeline"
 }
 
 variable "ecr_image_push_rule_name" {

@@ -12,6 +12,15 @@ data "aws_codecommit_repository" "gitops_repo" {
   repository_name = var.codecommit_repo_name
 }
 
+data "aws_ecr_repository" "repositories" {
+  for_each = toset(var.ecr_registry_triggers)
+  name     = each.key
+}
+
+locals {
+  ecr_arn_list = [for repo in data.aws_ecr_repository.repositories : repo.arn]
+}
+
 #region CodeBuild
 
 data "aws_iam_policy_document" "assume_role_codebuild" {
@@ -159,7 +168,7 @@ data "aws_iam_policy_document" "lambda_function_policy_document" {
     actions = [
       "ecr:DescribeImages"
     ]
-    resources = var.ecr_registry_triggers
+    resources = local.ecr_arn_list
   }
 
   statement {
@@ -224,10 +233,10 @@ resource "aws_cloudwatch_event_rule" "ecr_image_push" {
   event_pattern = jsonencode({
     source      = ["aws.ecr"]
     detail-type = ["ECR Image Action"]
-    # resources   = var.ecr_registry_triggers
-    region = [data.aws_region.current.name]
+    region      = [data.aws_region.current.name]
     detail = {
-      action-type = ["PUSH"]
+      action-type     = ["PUSH"]
+      repository-name = var.ecr_registry_triggers
     }
   })
 }
