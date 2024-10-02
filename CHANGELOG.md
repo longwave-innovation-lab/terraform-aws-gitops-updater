@@ -1,4 +1,15 @@
-## 0.1.0 (2024-10-02)
+## [1.0.0](https://git.lantechlongwave.it/RnD/terraform-aws-gitops-updater/compare/v0.1.0...v1.0.0) (2024-10-02)
+
+
+### ⚠ BREAKING CHANGES
+
+* changed the way to reference the ecr regisries to make it possible to isolate the event rule
+
+### Bug Fixes
+
+* changed the way to reference the ecr regisries to make it possible to isolate the event rule ([7b7f93e](https://git.lantechlongwave.it/RnD/terraform-aws-gitops-updater/commit/7b7f93e3622029611f27cb85cffdc60aaac6e6a4))
+
+## [0.1.0](https://git.lantechlongwave.it/RnD/terraform-aws-gitops-updater/compare/60a96a8bba0f96a6ec64868cc2025891178798bc...v0.1.0) (2024-10-02)
 
 
 ### Features
