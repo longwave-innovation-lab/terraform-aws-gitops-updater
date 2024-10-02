@@ -1,0 +1,36 @@
+version: 0.2
+
+env:
+  variables:
+    IMAGE_NAME: ""
+    IMAGE_TAG: ""
+phases:
+  pre_build:
+    commands:
+    - echo 'Pre_build_phase'
+    - echo 'Testing tools BEGIN...'
+    - aws --version
+    - python --version
+    - pip --version
+    - echo 'installing git-remote-codecommit...'
+    - pip install git-remote-codecommit
+    - git --version
+    - REPO_URL="codecommit::$AWS_REGION://$GITOPS_REPO_NAME"
+    - echo "Going to clone <$REPO_URL>"
+    - echo "TESTING CUSTOM ENV VARIABLES, IMAGE <$IMAGE_NAME> TAG <$IMAGE_TAG>"
+    - git config --global user.email "$GIT_MAIL"
+    - git config --global user.name "$GIT_USERNAME"
+  build:
+    commands:
+    - echo "Build_phase"
+    - echo "Cloning repository <$REPO_URL>..."
+    - git clone --depth 1 --branch main "$REPO_URL"
+    - cd $GITOPS_REPO_NAME
+    - pip install -r requirements.txt
+    - python image_tag_updater.py -i $IMAGE_NAME -t $IMAGE_TAG -c image_tag_mappings.json
+    - git add *
+    - git commit -m "Automatic Pipeline - Updated image $IMAGE_NAME to version $IMAGE_TAG"
+    - git push
+  post_build:
+    commands:
+    - echo 'Post_build_phase'
