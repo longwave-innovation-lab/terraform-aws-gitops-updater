@@ -1,4 +1,11 @@
-## 2.0.0 (2025-01-30)
+## [2.0.1](https://git.lantechlongwave.it/RnD/terraform-aws-gitops-updater/compare/v2.0.0...v2.0.1) (2025-01-30)
+
+
+### Bug Fixes
+
+* added default tags with Service Project GitopsUpdater ([e02366e](https://git.lantechlongwave.it/RnD/terraform-aws-gitops-updater/commit/e02366e768343a9dca1c4f99fc84d24d158ec078))
+
+## [2.0.0](https://git.lantechlongwave.it/RnD/terraform-aws-gitops-updater/compare/60a96a8bba0f96a6ec64868cc2025891178798bc...v2.0.0) (2025-01-30)
 
 
 ### ⚠ BREAKING CHANGES

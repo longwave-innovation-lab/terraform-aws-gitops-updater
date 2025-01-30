@@ -1,6 +1,6 @@
 {
   "name": "terraform-aws-gitops-updater",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Terraform module that creates a codebuild pipeline triggered by push on ECR registries.",
   "directories": {
     "doc": "docs"
