@@ -39,6 +39,7 @@ data "aws_iam_policy_document" "assume_role_codebuild" {
 resource "aws_iam_role" "codebuild_role" {
   name_prefix        = substr("${var.codebuild_project_name}", 0, 38)
   assume_role_policy = data.aws_iam_policy_document.assume_role_codebuild.json
+  tags = var.tags
 }
 
 # Needed to lookup if images was already present or not
@@ -92,7 +93,7 @@ resource "aws_codebuild_project" "cb_project" {
   build_timeout  = var.build_minutes_timeout
   queued_timeout = var.codebuild_queue_minutes_timeout
   service_role   = aws_iam_role.codebuild_role.arn
-
+  description    = "CodeBuild project created with the purpose of updating the git repo each time an images is pushes to ECR"
   environment {
     compute_type                = var.codebuild_comput_type
     image                       = var.codebuild_image
@@ -132,6 +133,7 @@ resource "aws_codebuild_project" "cb_project" {
   cache {
     type = "NO_CACHE"
   }
+  tags = var.tags
 }
 
 # aws codebuild batch-get-projects --names TepK8sAppsGitOpsSynchEF1D90-vPWKPSV49Jq2 --profile tep
@@ -154,6 +156,7 @@ resource "aws_iam_role" "lambda_function_role" {
       }
     ]
   })
+  tags = var.tags
 }
 
 resource "aws_iam_role_policy_attachment" "lambda_basic_execution" {
@@ -196,14 +199,14 @@ data "archive_file" "lambda" {
 resource "aws_lambda_function" "codebuild_triggerer" {
   # If the file is not in the current working directory you will need to include a
   # path.module in the filename.
-  filename      = "lambda_function_payload.zip"
-  function_name = var.lambda_triggerer_name
-  role          = aws_iam_role.lambda_function_role.arn
-  handler       = "app.lambda_handler"
-
+  filename         = "lambda_function_payload.zip"
+  function_name    = var.lambda_triggerer_name
+  role             = aws_iam_role.lambda_function_role.arn
+  handler          = "app.lambda_handler"
+  description      = "Lambda function that will trigger Gitops update Codebuild Project for CICD"
   source_code_hash = data.archive_file.lambda.output_base64sha256
 
-  runtime       = "python3.9"
+  runtime       = "python3.12"
   architectures = ["arm64"]
   timeout       = 10
   memory_size   = 256
@@ -213,6 +216,7 @@ resource "aws_lambda_function" "codebuild_triggerer" {
       "CODEBUILD_PROJECT_NAME" = aws_codebuild_project.cb_project.name
     }
   }
+  tags = var.tags
 }
 
 resource "aws_lambda_permission" "allow_eventbridge" {
@@ -239,6 +243,7 @@ resource "aws_cloudwatch_event_rule" "ecr_image_push" {
       repository-name = var.ecr_registry_triggers
     }
   })
+  tags = var.tags
 }
 
 resource "aws_cloudwatch_event_target" "lambda_target" {
@@ -258,6 +263,7 @@ resource "aws_cloudwatch_event_target" "lambda_target" {
 
 resource "aws_sqs_queue" "evnt_rule_target_dlq" {
   name = "${var.event_rule_target_id}-dlq"
+  tags = var.tags
 }
 
 #endregion EventRule

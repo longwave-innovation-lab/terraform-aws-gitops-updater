@@ -7,10 +7,10 @@ logger.setLevel(logging.INFO)
 
 # Init clients
 codebuild = boto3.client('codebuild')
+ecr_client = boto3.client('ecr')
 
 # Checks if an image tag exists in the repo
 def check_tag_exists(tag:str, repo:str):
-    ecr_client = boto3.client('ecr')
     response = ecr_client.describe_images(repositoryName=repo, filter={'tagStatus': 'TAGGED'})
     for i in response['imageDetails']:
         if tag in i['imageTags']:
@@ -43,11 +43,11 @@ def lambda_handler(event, context):
         result_status = 400
         result_msg = "Malformed event received, 'detail' key object is null"
         trigger_anyway = False
-
+        
     if trigger_anyway is not False and (tag is None or tag == "latest" or repository_name is None):
-        logger.info(f"Not triggering on repository <{repository_name}> tag <{tag}>")
         result_status = 200
         result_msg = f"Not triggering on repository <{repository_name}> tag <{tag}>"
+        logger.info(result_msg)
         trigger_anyway = False
 
     

@@ -79,3 +79,11 @@ variable "codebuild_git_user_name" {
   default     = "codebuild.gitops_updater"
   description = "Name of the git user which will end up in git commits"
 }
+
+variable "tags" {
+  type = map(string)
+  default = {
+    "ServiceScope" = "Gitops Updater"
+  }
+  description = "Tags to apply to all resources"
+}
