@@ -92,7 +92,7 @@ resource "aws_codebuild_project" "cb_project" {
   build_timeout  = var.build_minutes_timeout
   queued_timeout = var.codebuild_queue_minutes_timeout
   service_role   = aws_iam_role.codebuild_role.arn
-
+  description    = "CodeBuild project created with the purpose of updating the git repo each time an images is pushes to ECR"
   environment {
     compute_type                = var.codebuild_comput_type
     image                       = var.codebuild_image
@@ -196,14 +196,14 @@ data "archive_file" "lambda" {
 resource "aws_lambda_function" "codebuild_triggerer" {
   # If the file is not in the current working directory you will need to include a
   # path.module in the filename.
-  filename      = "lambda_function_payload.zip"
-  function_name = var.lambda_triggerer_name
-  role          = aws_iam_role.lambda_function_role.arn
-  handler       = "app.lambda_handler"
-
+  filename         = "lambda_function_payload.zip"
+  function_name    = var.lambda_triggerer_name
+  role             = aws_iam_role.lambda_function_role.arn
+  handler          = "app.lambda_handler"
+  description      = "Lambda function that will trigger Gitops update Codebuild Project for CICD"
   source_code_hash = data.archive_file.lambda.output_base64sha256
 
-  runtime       = "python3.9"
+  runtime       = "python3.12"
   architectures = ["arm64"]
   timeout       = 10
   memory_size   = 256
