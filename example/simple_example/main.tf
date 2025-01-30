@@ -5,8 +5,5 @@ module "gitops_updater" {
   ecr_registry_triggers = [
     "demo_pipe"
   ]
-  # codecommit_repo_arn = "arn:aws:codecommit:eu-west-1:687331130220:ll-k8s-lab01-apps"
   codecommit_repo_name = "ll-k8s-lab01-apps"
 }
-
-# aws codecommit get-repository --repository-name ll-k8s-lab01-apps --query 'repositoryMetadata.Arn' --output text --profile innovation
