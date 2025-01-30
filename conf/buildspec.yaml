@@ -2,6 +2,7 @@ version: 0.2
 
 env:
   variables:
+    # Image name and image tag are set by the lambda that triggers this project
     IMAGE_NAME: ""
     IMAGE_TAG: ""
 phases:
