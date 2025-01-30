@@ -63,6 +63,7 @@ No modules.
 | <a name="input_ecr_image_push_rule_name"></a> [ecr\_image\_push\_rule\_name](#input\_ecr\_image\_push\_rule\_name) | Name of the event rule for ECR image push. | `string` | `"ecr-image-push-rule"` | no |
 | <a name="input_event_rule_target_id"></a> [event\_rule\_target\_id](#input\_event\_rule\_target\_id) | ID of the target for the event rule | `string` | `"InvokeLambdaTriggerer"` | no |
 | <a name="input_lambda_triggerer_name"></a> [lambda\_triggerer\_name](#input\_lambda\_triggerer\_name) | Name of the lambda function which will trigger the pipeline. | `string` | `"ECRPushListener"` | no |
+| <a name="input_tags"></a> [tags](#input\_tags) | Tags to apply to all resources | `map(string)` | <pre>{<br>  "ServiceScope": "Gitops Updater"<br>}</pre> | no |
 
 ## Outputs
 
