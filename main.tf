@@ -193,13 +193,13 @@ resource "aws_iam_role_policy" "trigger_policy" {
 data "archive_file" "lambda" {
   type        = "zip"
   source_file = "${path.module}/lambda_code/app.py"
-  output_path = "lambda_function_payload.zip"
+  output_path = "${path.module}/lambda_function_payload.zip"
 }
 
 resource "aws_lambda_function" "codebuild_triggerer" {
   # If the file is not in the current working directory you will need to include a
   # path.module in the filename.
-  filename         = "lambda_function_payload.zip"
+  filename         = "${path.module}/lambda_function_payload.zip"
   function_name    = var.lambda_triggerer_name
   role             = aws_iam_role.lambda_function_role.arn
   handler          = "app.lambda_handler"
