@@ -21,7 +21,7 @@ variable "lambda_triggerer_name" {
   description = "Name of the lambda function which will trigger the pipeline."
 }
 
-variable "codecommit_repo_name" {
+variable "repo_name" {
   type        = string
   description = "Name of the CodeCommit repository which will be updated by the pipeline"
 }

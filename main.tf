@@ -9,7 +9,7 @@ data "aws_caller_identity" "current" {}
 data "aws_region" "current" {}
 
 data "aws_codecommit_repository" "gitops_repo" {
-  repository_name = var.codecommit_repo_name
+  repository_name = var.repo_name
 }
 
 data "aws_ecr_repository" "repositories" {

@@ -5,5 +5,5 @@ module "gitops_updater" {
   ecr_registry_triggers = [
     "demo_pipe"
   ]
-  codecommit_repo_name = "ll-k8s-lab01-apps"
+  repo_name = "ll-k8s-lab01-apps"
 }
