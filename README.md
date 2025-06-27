@@ -28,7 +28,7 @@ To make this work it uses the [Github Apps](https://docs.github.com/en/apps/crea
 
 Create a github app with the right configuration just:
 
-1. [Create a Github App](https://docs.github.com/en/apps/creating-github-apps/registering-a-github-app/registering-a-github-app) in you own account or in the Organization account. 
+1. [Create a Github App](https://docs.github.com/en/apps/creating-github-apps/registering-a-github-app/registering-a-github-app) in you own account or in the Organization account.
     > When creating for an Organization you **MUST** be the owner
     > You can use whatever as a website url, no callback url is needed and neither webhook active
 2. **Give Read and Write permission on Contents**
