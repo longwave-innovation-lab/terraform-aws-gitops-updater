@@ -1,3 +1,20 @@
+locals {
+  github_env_vars = var.is_codecommit_repo ? [] : [{
+    name  = "GITHUB_APP_ID"
+    type  = "PARAMETER_STORE"
+    value = var.github_app_id_parameter
+    }, {
+    name  = "GITHUB_APP_INSTALL_ID"
+    type  = "PARAMETER_STORE"
+    value = var.github_app_installation_id_parameter
+    }, {
+    name  = "GITHUB_APP_PRIVATE_KEY"
+    type  = "PARAMETER_STORE"
+    value = var.github_app_private_key_parameter
+    }
+  ]
+}
+
 data "aws_iam_policy_document" "assume_role_codebuild" {
   statement {
     effect = "Allow"
@@ -38,6 +55,19 @@ data "aws_iam_policy_document" "codebuild_default_policy" {
       "arn:aws:logs:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:log-group:/aws/codebuild/${var.codebuild_project_name}"
     ]
   }
+}
+
+resource "aws_iam_policy" "codebuild_default" {
+  policy = data.aws_iam_policy_document.codebuild_default_policy.json
+}
+
+resource "aws_iam_role_policy_attachment" "codebuild_default" {
+  policy_arn = aws_iam_policy.codebuild_default.arn
+  role       = aws_iam_role.codebuild_role.name
+}
+
+data "aws_iam_policy_document" "codecommit" {
+  count = var.is_codecommit_repo ? 1 : 0
 
   statement {
     effect = "Allow"
@@ -49,18 +79,50 @@ data "aws_iam_policy_document" "codebuild_default_policy" {
       "codecommit:List*",
     ]
     resources = [
-      data.aws_codecommit_repository.gitops_repo.arn
+      data.aws_codecommit_repository.gitops_repo[0].arn
     ]
   }
 }
 
-resource "aws_iam_role_policy" "codebuild_default" {
-  role   = aws_iam_role.codebuild_role.name
-  policy = data.aws_iam_policy_document.codebuild_default_policy.json
+resource "aws_iam_policy" "codecommit" {
+  count  = var.is_codecommit_repo ? 1 : 0
+  policy = data.aws_iam_policy_document.codecommit[0].json
+}
+
+resource "aws_iam_role_policy_attachment" "codecommit" {
+  count      = var.is_codecommit_repo ? 1 : 0
+  policy_arn = aws_iam_policy.codecommit[0].arn
+  role       = aws_iam_role.codebuild_role.name
+}
+
+data "aws_iam_policy_document" "read_github_app_ssm" {
+  count = var.is_codecommit_repo ? 0 : 1
+  statement {
+    effect = "Allow"
+    actions = [
+      "ssm:GetParameters"
+    ]
+    resources = [
+      "arn:aws:ssm:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:parameter${var.github_app_id_parameter}",
+      "arn:aws:ssm:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:parameter${var.github_app_installation_id_parameter}",
+      "arn:aws:ssm:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:parameter${var.github_app_private_key_parameter}"
+    ]
+  }
+}
+
+resource "aws_iam_policy" "read_github_app_ssm" {
+  count  = var.is_codecommit_repo ? 0 : 1
+  policy = data.aws_iam_policy_document.read_github_app_ssm[0].json
+}
+
+resource "aws_iam_role_policy_attachment" "read_github_app_ssm" {
+  count      = var.is_codecommit_repo ? 0 : 1
+  policy_arn = aws_iam_policy.read_github_app_ssm[0].arn
+  role       = aws_iam_role.codebuild_role.name
 }
 
 data "local_file" "buildspec" {
-  filename = "${path.module}/conf/buildspec.yaml"
+  filename = var.is_codecommit_repo ? "${path.module}/conf/buildspec.yaml" : "${path.module}/conf/buildspec-github.yaml"
 }
 
 resource "aws_codebuild_project" "cb_project" {
@@ -91,7 +153,22 @@ resource "aws_codebuild_project" "cb_project" {
     environment_variable {
       name  = "GITOPS_REPO_NAME"
       type  = "PLAINTEXT"
-      value = data.aws_codecommit_repository.gitops_repo.repository_name
+      value = var.repo_name
+    }
+
+    environment_variable {
+      name  = "GITOPS_REPO_OWNER"
+      type  = "PLAINTEXT"
+      value = var.repo_owner
+    }
+
+    dynamic "environment_variable" {
+      for_each = local.github_env_vars
+      content {
+        name  = environment_variable.value.name
+        type  = environment_variable.value.type
+        value = environment_variable.value.value
+      }
     }
   }
 

@@ -23,7 +23,37 @@ variable "lambda_triggerer_name" {
 
 variable "repo_name" {
   type        = string
-  description = "Name of the CodeCommit repository which will be updated by the pipeline"
+  description = "Name of therepository which will be updated by the pipeline"
+}
+
+variable "repo_owner" {
+  type        = string
+  description = "Owner of the repository that will be updated by the pipeline"
+  default     = null
+}
+
+variable "is_codecommit_repo" {
+  type        = bool
+  default     = true
+  description = "Whether the repo is a codecommit repo or not"
+}
+
+variable "github_app_id_parameter" {
+  default     = null
+  type        = string
+  description = "SSM parameter name for the GitHub App ID. Only required when repository is on Github."
+}
+
+variable "github_app_installation_id_parameter" {
+  default     = null
+  type        = string
+  description = "SSM parameter name for the GitHub App Installation ID. Only required when repository is on Github."
+}
+
+variable "github_app_private_key_parameter" {
+  default     = null
+  type        = string
+  description = "SSM parameter name for the GitHub App Private Key. Only required when repository is on Github."
 }
 
 variable "codebuild_project_name" {

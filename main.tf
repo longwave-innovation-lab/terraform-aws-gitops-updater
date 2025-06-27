@@ -1,14 +1,8 @@
-/**
- * # terraform-aws-gitops-updater
- *
- * Terraform module that creates a codebuild pipeline triggered by push on ECR registries.
- * 
- */
-
 data "aws_caller_identity" "current" {}
 data "aws_region" "current" {}
 
 data "aws_codecommit_repository" "gitops_repo" {
+  count           = var.is_codecommit_repo ? 1 : 0
   repository_name = var.repo_name
 }
 

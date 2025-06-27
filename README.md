@@ -1,7 +1,50 @@
-<!-- BEGIN_TF_DOCS -->
-# terraform-aws-gitops-updater
+# terraform-aws-gitops-updater <!-- omit in toc -->
 
 Terraform module that creates a codebuild pipeline triggered by push on ECR registries.
+
+- [Repository Types](#repository-types)
+  - [Codecommit](#codecommit)
+  - [Github](#github)
+- [Requirements](#requirements)
+- [Providers](#providers)
+- [Modules](#modules)
+- [Resources](#resources)
+- [Inputs](#inputs)
+- [Outputs](#outputs)
+
+## Repository Types
+
+### Codecommit
+
+This module has baked in support for codecommit repositories inside the same account withuot any additional work.
+
+Just set the `is_codecommit_repo` to `true`, give the name of the repo to `repo_name` and let the module handle all the permissions headaches.
+
+### Github
+
+When setting `is_codecommit_repo` to `false` this module will think you are planning on using a Github Repo, it does **NOT** support any other platform at the moment.
+
+To make this work it uses the [Github Apps](https://docs.github.com/en/apps/creating-github-apps/about-creating-github-apps/about-creating-github-apps) authentication method.
+
+Create a github app with the right configuration just:
+
+1. [Create a Github App](https://docs.github.com/en/apps/creating-github-apps/registering-a-github-app/registering-a-github-app) in you own account or in the Organization account. 
+    > When creating for an Organization you **MUST** be the owner
+    > You can use whatever as a website url, no callback url is needed and neither webhook active
+2. **Give Read and Write permission on Contents**
+3. Make it available only in your account or organization
+4. **Save the App Id somethere**
+5. Once created generate a [private key](https://docs.github.com/en/apps/creating-github-apps/authenticating-with-a-github-app/managing-private-keys-for-github-apps#about-private-keys-for-github-apps) and **save it somewhere**
+6. [Install it](https://docs.github.com/en/apps/using-github-apps/installing-your-own-github-app)
+7. [Get the installation id](https://stackoverflow.com/questions/74462420/where-can-we-find-github-apps-installation-id) and **save it somewhere**
+8. Copy the value of the App ID, Installation ID and the Private Key in the [Parameter Store](https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-parameter-store.html)
+9. Use these variables to give the module the right SSM parameter where you stored those values:
+    - `github_app_id_parameter`
+    - `github_app_installation_id_parameter`
+    - `github_app_private_key_parameter`
+10. Enjoy!
+
+<!-- BEGIN_TF_DOCS -->
 
 ## Requirements
 
