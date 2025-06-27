@@ -1,3 +1,14 @@
+## [3.0.0](https://git.lantechlongwave.it/RnD/terraform-aws-gitops-updater/compare/v2.0.2...v3.0.0) (2025-06-27)
+
+
+### ⚠ BREAKING CHANGES
+
+* renamed codecommit_repo_name in repo_name since codecommit will be deprecated
+
+### Bug Fixes
+
+* renamed codecommit_repo_name in repo_name since codecommit will be deprecated ([4935cf8](https://git.lantechlongwave.it/RnD/terraform-aws-gitops-updater/commit/4935cf832e7e820694f9c5e71b66294975c8c6f1))
+
 ## [2.0.2](https://git.lantechlongwave.it/RnD/terraform-aws-gitops-updater/compare/v2.0.1...v2.0.2) (2025-01-31)
 
 
