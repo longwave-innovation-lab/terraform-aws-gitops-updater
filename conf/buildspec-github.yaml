@@ -1,0 +1,71 @@
+version: 0.2
+
+env:
+  variables:
+    # Image name and image tag are set by the lambda that triggers this project
+    IMAGE_NAME: ""
+    IMAGE_TAG: ""
+phases:
+  pre_build:
+    commands:
+    - echo 'Pre_build_phase'
+    - echo 'Testing tools BEGIN...'
+    - aws --version
+    - python --version
+    - pip --version
+    - echo "Installing required tools..."
+    - pip install PyJWT cryptography requests
+    - git --version
+
+    - echo "Saving private key to file..."
+    - echo "$GITHUB_APP_PRIVATE_KEY" > private-key.pem
+
+    - echo "Generating JWT..."
+    - |
+      python <<EOF > jwt.txt
+      import jwt, time
+      with open("private-key.pem", "r") as f:
+          private_key = f.read()
+      payload = {
+          "iat": int(time.time()) - 60,
+          "exp": int(time.time()) + (10 * 60),
+          "iss": int("${GITHUB_APP_ID}")
+      }
+      encoded_jwt = jwt.encode(payload, private_key, algorithm="RS256")
+      print(encoded_jwt)
+      EOF
+    - GITHUB_JWT=$(cat jwt.txt)
+
+    - echo "Requesting Installation Access Token..."
+    - |
+      INSTALL_TOKEN_RESPONSE=$(curl -s -X POST \
+        -H "Authorization: Bearer $GITHUB_JWT" \
+        -H "Accept: application/vnd.github+json" \
+        https://api.github.com/app/installations/${GITHUB_APP_INSTALL_ID}/access_tokens)
+
+      echo "API Response: $INSTALL_TOKEN_RESPONSE"
+
+      INSTALL_TOKEN=$(echo "$INSTALL_TOKEN_RESPONSE" | python -c "import sys, json; print(json.load(sys.stdin)['token'])")
+
+    - echo "Setting up Git URL..."
+    - REPO_URL="https://x-access-token:$INSTALL_TOKEN@github.com/$GITOPS_REPO_OWNER/$GITOPS_REPO_NAME.git"
+    - echo "Going to clone <$REPO_URL>"
+
+    - echo "TESTING CUSTOM ENV VARIABLES, IMAGE <$IMAGE_NAME> TAG <$IMAGE_TAG>"
+    - git config --global user.email "$GIT_MAIL"
+    - git config --global user.name "$GIT_USERNAME"
+
+  build:
+    commands:
+    - echo "Build_phase"
+    - echo "Cloning repository <$REPO_URL>..."
+    - git clone --depth 1 --branch main "$REPO_URL"
+    - cd $GITOPS_REPO_NAME
+    - pip install -r requirements.txt
+    - python image_tag_updater.py -i $IMAGE_NAME -t $IMAGE_TAG -c image_tag_mappings.json
+    - git add *
+    - git commit -m "Automatic Pipeline - Updated image $IMAGE_NAME to version $IMAGE_TAG"
+    - git push
+  post_build:
+    commands:
+    - echo 'Post_build_phase'
