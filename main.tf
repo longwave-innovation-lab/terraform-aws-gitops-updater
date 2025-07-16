@@ -11,6 +11,10 @@ data "aws_ecr_repository" "repositories" {
   name     = each.key
 }
 
+resource "random_id" "resource_suffix" {
+  byte_length = 6
+}
+
 locals {
   ecr_arn_list = [for repo in data.aws_ecr_repository.repositories : repo.arn]
 }
