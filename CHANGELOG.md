@@ -1,3 +1,10 @@
+## [3.0.1](https://git.lantechlongwave.it/RnD/terraform-aws-gitops-updater/compare/v3.0.0...v3.0.1) (2025-07-16)
+
+
+### Bug Fixes
+
+* solved issue with multiple istances of this module in the same terraform script closes [#8](https://git.lantechlongwave.it/RnD/terraform-aws-gitops-updater/issues/8) ([319b4fe](https://git.lantechlongwave.it/RnD/terraform-aws-gitops-updater/commit/319b4fee3d613b54d6815ccd745a88bb61203e8d))
+
 ## [3.0.0](https://git.lantechlongwave.it/RnD/terraform-aws-gitops-updater/compare/v2.0.2...v3.0.0) (2025-06-27)
 
 
