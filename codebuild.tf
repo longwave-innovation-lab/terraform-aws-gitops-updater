@@ -126,7 +126,7 @@ data "local_file" "buildspec" {
 }
 
 resource "aws_codebuild_project" "cb_project" {
-  name           = var.codebuild_project_name
+  name           = "${var.codebuild_project_name}-${random_id.resource_suffix.hex}"
   build_timeout  = var.build_minutes_timeout
   queued_timeout = var.codebuild_queue_minutes_timeout
   service_role   = aws_iam_role.codebuild_role.arn

@@ -1,7 +1,6 @@
 resource "aws_cloudwatch_event_rule" "ecr_image_push" {
-  name        = var.ecr_image_push_rule_name
+  name_prefix = var.ecr_image_push_rule_name
   description = "Capture ECR image push events for specific repositories"
-
   event_pattern = jsonencode({
     source      = ["aws.ecr"]
     detail-type = ["ECR Image Action"]
@@ -30,6 +29,6 @@ resource "aws_cloudwatch_event_target" "lambda_target" {
 }
 
 resource "aws_sqs_queue" "evnt_rule_target_dlq" {
-  name = "${var.event_rule_target_id}-dlq"
-  tags = var.tags
+  name_prefix = "${var.event_rule_target_id}-dlq"
+  tags        = var.tags
 }

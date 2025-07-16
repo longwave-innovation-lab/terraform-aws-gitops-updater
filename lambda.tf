@@ -21,7 +21,6 @@ resource "aws_iam_role_policy_attachment" "lambda_basic_execution" {
 }
 
 data "aws_iam_policy_document" "lambda_function_policy_document" {
-
   statement {
     effect = "Allow"
     actions = [
@@ -29,7 +28,6 @@ data "aws_iam_policy_document" "lambda_function_policy_document" {
     ]
     resources = local.ecr_arn_list
   }
-
   statement {
     effect = "Allow"
     actions = [
@@ -56,17 +54,15 @@ resource "aws_lambda_function" "codebuild_triggerer" {
   # If the file is not in the current working directory you will need to include a
   # path.module in the filename.
   filename         = "${path.module}/lambda_function_payload.zip"
-  function_name    = var.lambda_triggerer_name
+  function_name    = "${var.lambda_triggerer_name}-${random_id.resource_suffix.hex}"
   role             = aws_iam_role.lambda_function_role.arn
   handler          = "app.lambda_handler"
   description      = "Lambda function that will trigger Gitops update Codebuild Project for CICD"
   source_code_hash = data.archive_file.lambda.output_base64sha256
-
-  runtime       = "python3.12"
-  architectures = ["arm64"]
-  timeout       = 10
-  memory_size   = 256
-
+  runtime          = "python3.12"
+  architectures    = ["arm64"]
+  timeout          = 10
+  memory_size      = 256
   environment {
     variables = {
       "CODEBUILD_PROJECT_NAME" = aws_codebuild_project.cb_project.name
