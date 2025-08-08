@@ -159,7 +159,7 @@ resource "aws_codebuild_project" "cb_project" {
     environment_variable {
       name  = "GITOPS_REPO_OWNER"
       type  = "PLAINTEXT"
-      value = var.repo_owner ? var.repo_owner : ""
+      value = var.repo_owner != null ? var.repo_owner : ""
     }
 
     dynamic "environment_variable" {
