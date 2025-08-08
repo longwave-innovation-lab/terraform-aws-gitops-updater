@@ -43,20 +43,26 @@ def lambda_handler(event, context):
         result_status = 400
         result_msg = "Malformed event received, 'detail' key object is null"
         trigger_anyway = False
-        
-    if trigger_anyway is not False and (tag is None or tag == "latest" or repository_name is None):
+    
+    if tag == "":
+        tag = None
+
+    if repository_name == "":
+        repository_name = None
+
+    if trigger_anyway and (tag is None or tag == "latest" or repository_name is None):
         result_status = 200
         result_msg = f"Not triggering on repository <{repository_name}> tag <{tag}>"
         logger.info(result_msg)
         trigger_anyway = False
 
     
-    if trigger_anyway is not False and  op_result == "FAILURE":
+    if trigger_anyway and  op_result == "FAILURE":
         logger.info(f"Check if repository <{repository_name}> tag <{tag}> already exists")
         trigger_anyway = check_tag_exists(tag, repository_name)
 
         if not trigger_anyway:
-            result_status = 500
+            result_status = 200
             result_msg = "There was an error during the image push which was not expected"
     
     if trigger_anyway:
