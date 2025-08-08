@@ -82,8 +82,8 @@ variable "codebuild_comput_type" {
 
 variable "codebuild_image" {
   type        = string
-  default     = "aws/codebuild/amazonlinux2-x86_64-standard:4.0"
-  description = "Base image for the CodeBuild project"
+  default     = "aws/codebuild/amazonlinux2-x86_64-standard:5.0"
+  description = "Base image for the CodeBuild project. To list every image available use the command `aws codebuild list-curated-environment-images`."
 }
 
 variable "codebuild_container_type" {
@@ -100,7 +100,7 @@ variable "codebuild_buildspec_path" {
 
 variable "codebuild_git_user_mail" {
   type        = string
-  default     = "codebuild.gitops_updater@lantechlongwave.it"
+  default     = "codebuild.gitops_updater@longwave.it"
   description = "Email address of the git user which will end up in git commits"
 }
 
