@@ -1,3 +1,10 @@
+## [3.0.3](https://git.lantechlongwave.it/RnD/terraform-aws-gitops-updater/compare/v3.0.2...v3.0.3) (2025-08-08)
+
+
+### Bug Fixes
+
+* changed codebuild env var to not error when repo_owner is not defined ([6080b7a](https://git.lantechlongwave.it/RnD/terraform-aws-gitops-updater/commit/6080b7a81c7a7e35d3efac322f020372ef9f0bb3))
+
 ## [3.0.2](https://git.lantechlongwave.it/RnD/terraform-aws-gitops-updater/compare/v3.0.1...v3.0.2) (2025-08-08)
 
 
@@ -31,11 +38,4 @@
 ### Bug Fixes
 
 * **lambda:** fixed an error when used with another LW module lambda.zip payload will be used cross modules and cause conflics closes [#3](https://git.lantechlongwave.it/RnD/terraform-aws-gitops-updater/issues/3) ([1d8c4ae](https://git.lantechlongwave.it/RnD/terraform-aws-gitops-updater/commit/1d8c4aeaa6675cd29265faa03643975db0f80e94))
-
-## [2.0.1](https://git.lantechlongwave.it/RnD/terraform-aws-gitops-updater/compare/v2.0.0...v2.0.1) (2025-01-30)
-
-
-### Bug Fixes
-
-* added default tags with Service Project GitopsUpdater ([e02366e](https://git.lantechlongwave.it/RnD/terraform-aws-gitops-updater/commit/e02366e768343a9dca1c4f99fc84d24d158ec078))
 
