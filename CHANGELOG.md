@@ -1,3 +1,12 @@
+## [3.0.2](https://git.lantechlongwave.it/RnD/terraform-aws-gitops-updater/compare/v3.0.1...v3.0.2) (2025-08-08)
+
+
+### Bug Fixes
+
+* **action:** make action start on lambda code changes ([504c849](https://git.lantechlongwave.it/RnD/terraform-aws-gitops-updater/commit/504c849d9a162687c223120c1004a21abc0d1fe6))
+* now codebuild won't get triggered on empty tags closes [#10](https://git.lantechlongwave.it/RnD/terraform-aws-gitops-updater/issues/10) ([f274ae6](https://git.lantechlongwave.it/RnD/terraform-aws-gitops-updater/commit/f274ae678f759ac8760539b7363d8f6e635190d2))
+* upgraded CB default image, changed email of default git user to longwave ([e859b38](https://git.lantechlongwave.it/RnD/terraform-aws-gitops-updater/commit/e859b38d6b6a5aac3e8e17fae8310c7a023bfdd1))
+
 ## [3.0.1](https://git.lantechlongwave.it/RnD/terraform-aws-gitops-updater/compare/v3.0.0...v3.0.1) (2025-07-16)
 
 
@@ -29,25 +38,4 @@
 ### Bug Fixes
 
 * added default tags with Service Project GitopsUpdater ([e02366e](https://git.lantechlongwave.it/RnD/terraform-aws-gitops-updater/commit/e02366e768343a9dca1c4f99fc84d24d158ec078))
-
-## [2.0.0](https://git.lantechlongwave.it/RnD/terraform-aws-gitops-updater/compare/60a96a8bba0f96a6ec64868cc2025891178798bc...v2.0.0) (2025-01-30)
-
-
-### ⚠ BREAKING CHANGES
-
-* changed the way to reference the ecr regisries to make it possible to isolate the event rule
-
-### Features
-
-* first version with all triggers working, todo fix buildspec of codebuild ([60a96a8](https://git.lantechlongwave.it/RnD/terraform-aws-gitops-updater/commit/60a96a8bba0f96a6ec64868cc2025891178798bc))
-
-
-### Bug Fixes
-
-* **actions:** porting to github ([daa16e0](https://git.lantechlongwave.it/RnD/terraform-aws-gitops-updater/commit/daa16e0b91c0ec025bc9458c761e1d7d98de4a13))
-* added ignore to zip files ([1a0a723](https://git.lantechlongwave.it/RnD/terraform-aws-gitops-updater/commit/1a0a72351f10a740f20ee8545b978750c28ccaec))
-* changed the way to reference the ecr regisries to make it possible to isolate the event rule ([7b7f93e](https://git.lantechlongwave.it/RnD/terraform-aws-gitops-updater/commit/7b7f93e3622029611f27cb85cffdc60aaac6e6a4))
-* **issue template:** moved issue template to Github format ([50796fe](https://git.lantechlongwave.it/RnD/terraform-aws-gitops-updater/commit/50796fe6e17e4d2f10a10e3a9d5c9d024eb5ea4e))
-* **issue template:** moved temporarily issue template files to solve github port ([4a97fce](https://git.lantechlongwave.it/RnD/terraform-aws-gitops-updater/commit/4a97fce138b3f3e29620bcc2b032969e4616f294))
-* solved some tweaking problems to amke the pipeline working ([b4338b2](https://git.lantechlongwave.it/RnD/terraform-aws-gitops-updater/commit/b4338b25f6d0b10dbda33091912624e7c20c165b))
 
