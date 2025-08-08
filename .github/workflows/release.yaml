@@ -19,6 +19,8 @@ on:
     - '**.hcl'
     - '.terraform.lock.hcl'
     - 'package.json'
+    # Make new release when lambda code is changed
+    - 'lambda_code/*'
 # env:
 #   IMAGE_NAME: ${{ github.repository }}
 
