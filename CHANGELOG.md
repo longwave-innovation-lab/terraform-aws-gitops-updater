@@ -1,3 +1,19 @@
+## [4.0.0](https://git.lantechlongwave.it/RnD/terraform-aws-gitops-updater/compare/v3.0.4...v4.0.0) (2025-09-19)
+
+
+### ⚠ BREAKING CHANGES
+
+* update to terraform AWS provider V6 closes #16
+
+### Features
+
+* update to terraform AWS provider V6 closes [#16](https://git.lantechlongwave.it/RnD/terraform-aws-gitops-updater/issues/16) ([dbdbd49](https://git.lantechlongwave.it/RnD/terraform-aws-gitops-updater/commit/dbdbd492dc8d6fefa259ab3d60479aeaeda26389))
+
+
+### Bug Fixes
+
+* **gitignore:** deleted terraform.locl.hcl and ingored it ([45f5021](https://git.lantechlongwave.it/RnD/terraform-aws-gitops-updater/commit/45f50218297b913672334c5f1505d53a4da96d04))
+
 ## [3.0.4](https://git.lantechlongwave.it/RnD/terraform-aws-gitops-updater/compare/v3.0.3...v3.0.4) (2025-08-08)
 
 
@@ -27,15 +43,4 @@
 ### Bug Fixes
 
 * solved issue with multiple istances of this module in the same terraform script closes [#8](https://git.lantechlongwave.it/RnD/terraform-aws-gitops-updater/issues/8) ([319b4fe](https://git.lantechlongwave.it/RnD/terraform-aws-gitops-updater/commit/319b4fee3d613b54d6815ccd745a88bb61203e8d))
-
-## [3.0.0](https://git.lantechlongwave.it/RnD/terraform-aws-gitops-updater/compare/v2.0.2...v3.0.0) (2025-06-27)
-
-
-### ⚠ BREAKING CHANGES
-
-* renamed codecommit_repo_name in repo_name since codecommit will be deprecated
-
-### Bug Fixes
-
-* renamed codecommit_repo_name in repo_name since codecommit will be deprecated ([4935cf8](https://git.lantechlongwave.it/RnD/terraform-aws-gitops-updater/commit/4935cf832e7e820694f9c5e71b66294975c8c6f1))
 
