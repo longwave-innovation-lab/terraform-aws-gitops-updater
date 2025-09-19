@@ -47,14 +47,18 @@ Create a github app with the right configuration just:
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
 
-No requirements.
+| Name | Version |
+|------|---------|
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.5.7 |
+| <a name="requirement_archive"></a> [archive](#requirement\_archive) | >= 2.7.0 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 6.0.0 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_archive"></a> [archive](#provider\_archive) | n/a |
-| <a name="provider_aws"></a> [aws](#provider\_aws) | 5.69.0 |
+| <a name="provider_archive"></a> [archive](#provider\_archive) | >= 2.7.0 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 6.0.0 |
 | <a name="provider_local"></a> [local](#provider\_local) | n/a |
 | <a name="provider_random"></a> [random](#provider\_random) | n/a |
 
@@ -123,5 +127,12 @@ No modules.
 
 ## Outputs
 
-No outputs.
+| Name | Description |
+|------|-------------|
+| <a name="output_codebuild_updater_project_arn"></a> [codebuild\_updater\_project\_arn](#output\_codebuild\_updater\_project\_arn) | Codebuild updater project arn |
+| <a name="output_codebuild_updater_project_name"></a> [codebuild\_updater\_project\_name](#output\_codebuild\_updater\_project\_name) | Codebuild updater project name |
+| <a name="output_codebuild_updater_role_arn"></a> [codebuild\_updater\_role\_arn](#output\_codebuild\_updater\_role\_arn) | Codebuild updater role arn |
+| <a name="output_codebuild_updater_role_name"></a> [codebuild\_updater\_role\_name](#output\_codebuild\_updater\_role\_name) | Codebuild updater role name |
+| <a name="output_lambda_triggerer_arn"></a> [lambda\_triggerer\_arn](#output\_lambda\_triggerer\_arn) | Arn of the Lambda function that triggers Codebuild |
+| <a name="output_lambda_triggerer_function_name"></a> [lambda\_triggerer\_function\_name](#output\_lambda\_triggerer\_function\_name) | Function name of the Lambda function that triggers Codebuild |
 <!-- END_TF_DOCS -->
