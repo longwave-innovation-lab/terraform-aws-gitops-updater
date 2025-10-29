@@ -9,6 +9,8 @@ logger.setLevel(logging.INFO)
 codebuild = boto3.client('codebuild')
 ecr_client = boto3.client('ecr')
 
+do_not_trigger_tags: list[str] = ["latest", "cache", "cache_tag"]
+
 # Checks if an image tag exists in the repo
 def check_tag_exists(tag:str, repo:str):
     response = ecr_client.describe_images(repositoryName=repo, filter={'tagStatus': 'TAGGED'})
@@ -50,7 +52,7 @@ def lambda_handler(event, context):
     if repository_name == "":
         repository_name = None
 
-    if trigger_anyway and (tag is None or tag == "latest" or repository_name is None):
+    if trigger_anyway and (tag is None or tag not in do_not_trigger_tags or repository_name is None):
         result_status = 200
         result_msg = f"Not triggering on repository <{repository_name}> tag <{tag}>"
         logger.info(result_msg)
