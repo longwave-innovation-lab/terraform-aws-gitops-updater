@@ -5,6 +5,7 @@ Terraform module that creates a codebuild pipeline triggered by push on ECR regi
 - [Repository Types](#repository-types)
   - [Codecommit](#codecommit)
   - [Github](#github)
+- [Image Push Events](#image-push-events)
 - [Requirements](#requirements)
 - [Providers](#providers)
 - [Modules](#modules)
@@ -43,6 +44,16 @@ Create a github app with the right configuration just:
     - `github_app_installation_id_parameter`
     - `github_app_private_key_parameter`
 10. Enjoy!
+
+## Image Push Events
+
+This module triggers the Codebuild updater when ECR image push events are received.
+
+By default, this module will **not** trigger when:
+
+- The `latest` tag is pushed, since the latest image version would be pulled anyway, plus it is not best practice to use `latest` in production
+- The `cache` or `cache_tag` tags are pushed, since these should be reserved exclusively for storing cache in ECR to speed up build times in CodeBuild
+- Untagged images are pushed, such as the layers of image indexes when there is a multi-platform image
 
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
