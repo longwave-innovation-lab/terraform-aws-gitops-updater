@@ -1,5 +1,5 @@
 
-import logging, json, os
+import logging, json, os, re
 import boto3
 
 logger: logging.Logger = logging.getLogger()
@@ -9,7 +9,7 @@ logger.setLevel(logging.INFO)
 codebuild = boto3.client('codebuild')
 ecr_client = boto3.client('ecr')
 
-do_not_trigger_tags: list[str] = ["latest", "cache", "cache_tag"]
+do_not_trigger_regex: re = re.compile(os.getenv("ECR_IGNORE_TAG_REGEX", "^(latest|cache.*)$"))
 
 # Checks if an image tag exists in the repo
 def check_tag_exists(tag:str, repo:str):
@@ -52,7 +52,7 @@ def lambda_handler(event, context):
     if repository_name == "":
         repository_name = None
 
-    if trigger_anyway and (tag is None or tag in do_not_trigger_tags or repository_name is None):
+    if trigger_anyway and (tag is None or do_not_trigger_regex.match(tag) or repository_name is None):
         result_status = 200
         result_msg = f"Not triggering on repository <{repository_name}> tag <{tag}>"
         logger.info(result_msg)
