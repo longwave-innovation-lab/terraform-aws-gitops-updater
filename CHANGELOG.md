@@ -1,3 +1,10 @@
+## [4.2.0](https://git.lantechlongwave.it/RnD/terraform-aws-gitops-updater/compare/v4.1.1...v4.2.0) (2025-10-30)
+
+
+### Features
+
+* added regex pattern to void triggers on specific tags closes [#19](https://git.lantechlongwave.it/RnD/terraform-aws-gitops-updater/issues/19) ([83ce269](https://git.lantechlongwave.it/RnD/terraform-aws-gitops-updater/commit/83ce26988417f23ad263b0e7b5fc9104dc4c546e))
+
 ## [4.1.1](https://git.lantechlongwave.it/RnD/terraform-aws-gitops-updater/compare/v4.1.0...v4.1.1) (2025-10-30)
 
 
@@ -34,11 +41,4 @@
 ### Bug Fixes
 
 * changed codebuild env var to not error when repo_owner is not defined ([02e4564](https://git.lantechlongwave.it/RnD/terraform-aws-gitops-updater/commit/02e4564c68fac91b3348d4e0e2edd32b83a16eb6))
-
-## [3.0.3](https://git.lantechlongwave.it/RnD/terraform-aws-gitops-updater/compare/v3.0.2...v3.0.3) (2025-08-08)
-
-
-### Bug Fixes
-
-* changed codebuild env var to not error when repo_owner is not defined ([6080b7a](https://git.lantechlongwave.it/RnD/terraform-aws-gitops-updater/commit/6080b7a81c7a7e35d3efac322f020372ef9f0bb3))
 
