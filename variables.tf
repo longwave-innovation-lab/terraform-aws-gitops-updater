@@ -9,6 +9,12 @@ variable "ecr_image_push_rule_name" {
   description = "Name of the event rule for ECR image push."
 }
 
+variable "ecr_ignore_tag_regex" {
+  type        = string
+  default     = "^(latest|cache.*)$"
+  description = "Regex for tags to ignore. Tags which match this regex will **NOT** trigger the updater. Beware all tags are converted lowercase during checks."
+}
+
 variable "event_rule_target_id" {
   type        = string
   default     = "InvokeLambdaTriggerer"
