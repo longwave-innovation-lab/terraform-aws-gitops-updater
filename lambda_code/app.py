@@ -52,7 +52,7 @@ def lambda_handler(event, context):
     if repository_name == "":
         repository_name = None
 
-    if trigger_anyway and (tag is None or tag not in do_not_trigger_tags or repository_name is None):
+    if trigger_anyway and (tag is None or tag in do_not_trigger_tags or repository_name is None):
         result_status = 200
         result_msg = f"Not triggering on repository <{repository_name}> tag <{tag}>"
         logger.info(result_msg)
