@@ -29,7 +29,7 @@ phases:
         --repo-owner $GITOPS_REPO_OWNER \
         --repo-name $GITOPS_REPO_NAME)
     - echo "Going to clone <$REPO_URL>"
-      
+
 
     - echo "Configuring Git..."
     - git config --global user.email "$GIT_MAIL"

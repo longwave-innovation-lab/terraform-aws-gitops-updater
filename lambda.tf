@@ -66,7 +66,7 @@ resource "aws_lambda_function" "codebuild_triggerer" {
   environment {
     variables = {
       "CODEBUILD_PROJECT_NAME" = aws_codebuild_project.cb_project.name
-      "ECR_IGNORE_TAG_REGEX" = var.ecr_ignore_tag_regex
+      "ECR_IGNORE_TAG_REGEX"   = var.ecr_ignore_tag_regex
     }
   }
   tags = var.tags

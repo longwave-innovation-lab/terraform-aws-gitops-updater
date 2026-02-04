@@ -32,4 +32,3 @@
 * **issue template:** moved issue template to Github format ([50796fe](https://git.lantechlongwave.it/RnD/terraform-aws-gitops-updater/commit/50796fe6e17e4d2f10a10e3a9d5c9d024eb5ea4e))
 * **issue template:** moved temporarily issue template files to solve github port ([4a97fce](https://git.lantechlongwave.it/RnD/terraform-aws-gitops-updater/commit/4a97fce138b3f3e29620bcc2b032969e4616f294))
 * solved some tweaking problems to amke the pipeline working ([b4338b2](https://git.lantechlongwave.it/RnD/terraform-aws-gitops-updater/commit/b4338b25f6d0b10dbda33091912624e7c20c165b))
-
