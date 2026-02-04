@@ -36,4 +36,3 @@
 ### Bug Fixes
 
 * **gitignore:** deleted terraform.locl.hcl and ingored it ([45f5021](https://github.com/Longwave-innovation/terraform-aws-gitops-updater/commit/45f50218297b913672334c5f1505d53a4da96d04))
-

@@ -13,48 +13,29 @@ phases:
     - aws --version
     - python --version
     - pip --version
-    - echo "Installing required tools..."
-    - pip install PyJWT cryptography requests
     - git --version
+    - echo "Installing required tools..."
+    - pip install https://github.com/Longwave-innovation/gh-app-auth/releases/download/v0.2.0/gh_app_auth-0.2.0-py3-none-any.whl
 
     - echo "Saving private key to file..."
     - echo "$GITHUB_APP_PRIVATE_KEY" > private-key.pem
 
-    - echo "Generating JWT..."
+    - echo "Getting authenticated clone URL..."
     - |
-      python <<EOF > jwt.txt
-      import jwt, time
-      with open("private-key.pem", "r") as f:
-          private_key = f.read()
-      payload = {
-          "iat": int(time.time()) - 60,
-          "exp": int(time.time()) + (10 * 60),
-          "iss": int("${GITHUB_APP_ID}")
-      }
-      encoded_jwt = jwt.encode(payload, private_key, algorithm="RS256")
-      print(encoded_jwt)
-      EOF
-    - GITHUB_JWT=$(cat jwt.txt)
-
-    - echo "Requesting Installation Access Token..."
-    - |
-      INSTALL_TOKEN_RESPONSE=$(curl -s -X POST \
-        -H "Authorization: Bearer $GITHUB_JWT" \
-        -H "Accept: application/vnd.github+json" \
-        https://api.github.com/app/installations/${GITHUB_APP_INSTALL_ID}/access_tokens)
-
-      echo "API Response: $INSTALL_TOKEN_RESPONSE"
-
-      INSTALL_TOKEN=$(echo "$INSTALL_TOKEN_RESPONSE" | python -c "import sys, json; print(json.load(sys.stdin)['token'])")
-
-    - echo "Setting up Git URL..."
-    - REPO_URL="https://x-access-token:$INSTALL_TOKEN@github.com/$GITOPS_REPO_OWNER/$GITOPS_REPO_NAME.git"
+      REPO_URL=$(gh-app-auth configure-git \
+        --app-id $GITHUB_APP_ID \
+        --installation-id $GITHUB_APP_INSTALL_ID \
+        --private-key private_key.pem \
+        --repo-owner $GITOPS_REPO_OWNER \
+        --repo-name $GITOPS_REPO_NAME)
     - echo "Going to clone <$REPO_URL>"
 
-    - echo "TESTING CUSTOM ENV VARIABLES, IMAGE <$IMAGE_NAME> TAG <$IMAGE_TAG>"
+
+    - echo "Configuring Git..."
     - git config --global user.email "$GIT_MAIL"
     - git config --global user.name "$GIT_USERNAME"
 
+    - echo "TESTING CUSTOM ENV VARIABLES, IMAGE <$IMAGE_NAME> TAG <$IMAGE_TAG>"
   build:
     commands:
     - echo "Build_phase"

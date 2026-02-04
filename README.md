@@ -1,5 +1,21 @@
 # terraform-aws-gitops-updater <!-- omit in toc -->
 
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+- [Repository Types](#repository-types)
+  - [Codecommit](#codecommit)
+  - [Github](#github)
+- [Image Push Events](#image-push-events)
+- [Requirements](#requirements)
+- [Providers](#providers)
+- [Modules](#modules)
+- [Resources](#resources)
+- [Inputs](#inputs)
+- [Outputs](#outputs)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 Terraform module that creates a codebuild pipeline triggered by push on ECR registries.
 
 - [Repository Types](#repository-types)
@@ -135,7 +151,7 @@ No modules.
 | <a name="input_is_codecommit_repo"></a> [is\_codecommit\_repo](#input\_is\_codecommit\_repo) | Whether the repo is a codecommit repo or not | `bool` | `true` | no |
 | <a name="input_lambda_triggerer_name"></a> [lambda\_triggerer\_name](#input\_lambda\_triggerer\_name) | Name of the lambda function which will trigger the pipeline. | `string` | `"ECRPushListener"` | no |
 | <a name="input_repo_owner"></a> [repo\_owner](#input\_repo\_owner) | Owner of the repository that will be updated by the pipeline | `string` | `null` | no |
-| <a name="input_tags"></a> [tags](#input\_tags) | Tags to apply to all resources | `map(string)` | <pre>{<br>  "ServiceScope": "Gitops Updater"<br>}</pre> | no |
+| <a name="input_tags"></a> [tags](#input\_tags) | Tags to apply to all resources | `map(string)` | <pre>{<br/>  "ServiceScope": "Gitops Updater"<br/>}</pre> | no |
 
 ## Outputs
 
