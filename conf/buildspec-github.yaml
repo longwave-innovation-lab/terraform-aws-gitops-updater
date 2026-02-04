@@ -18,7 +18,7 @@ phases:
     - pip install https://github.com/Longwave-innovation/gh-app-auth/releases/download/v0.2.0/gh_app_auth-0.2.0-py3-none-any.whl
 
     - echo "Saving private key to file..."
-    - echo "$GITHUB_APP_PRIVATE_KEY" > private-key.pem
+    - echo "$GITHUB_APP_PRIVATE_KEY" > private_key.pem
 
     - echo "Getting authenticated clone URL..."
     - |
