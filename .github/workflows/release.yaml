@@ -19,7 +19,8 @@ on:
     - '**.hcl'
     - '.terraform.lock.hcl'
     - 'package.json'
-    - '/workflows/release.yaml'
+    - '.github/workflows/release.yaml'
+    - 'conf/buildspec*'
 
 jobs:
 
