@@ -1,3 +1,11 @@
+## [4.2.3](https://github.com/Longwave-innovation/terraform-aws-gitops-updater/compare/v4.2.2...v4.2.3) (2026-02-04)
+
+
+### Bug Fixes
+
+* **cicd:** updated when to release new versions ([9f2f02f](https://github.com/Longwave-innovation/terraform-aws-gitops-updater/commit/9f2f02fde54f729ed5aaea2e2e538119ce4c00af))
+* private key sintax error ([53fb769](https://github.com/Longwave-innovation/terraform-aws-gitops-updater/commit/53fb7692bec1c53acc33f1d2987effaf814c382e))
+
 ## [4.2.2](https://github.com/Longwave-innovation/terraform-aws-gitops-updater/compare/v4.2.1...v4.2.2) (2026-02-04)
 
 
@@ -24,11 +32,4 @@
 ### Bug Fixes
 
 * fixed condition on check tags which won't trigger update ([951cf48](https://github.com/Longwave-innovation/terraform-aws-gitops-updater/commit/951cf48bafdc27f6e182286fff1c5f972963aec1))
-
-## [4.1.0](https://github.com/Longwave-innovation/terraform-aws-gitops-updater/compare/v4.0.0...v4.1.0) (2025-10-29)
-
-
-### Features
-
-* lambda doesn't trigger updater when cache tags are pushed ([4174223](https://github.com/Longwave-innovation/terraform-aws-gitops-updater/commit/41742239ec0e933ad7fab39c4dc030178c268cab))
 
