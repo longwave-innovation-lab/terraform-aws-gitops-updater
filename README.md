@@ -1,21 +1,20 @@
+# terraform-aws-gitops-updater <!-- omit in toc -->
+
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-- [terraform-aws-gitops-updater <!-- omit in toc -->](#terraform-aws-gitops-updater----omit-in-toc---)
-  - [Repository Types](#repository-types)
-    - [Codecommit](#codecommit)
-    - [Github](#github)
-  - [Image Push Events](#image-push-events)
-  - [Requirements](#requirements)
-  - [Providers](#providers)
-  - [Modules](#modules)
-  - [Resources](#resources)
-  - [Inputs](#inputs)
-  - [Outputs](#outputs)
+- [Repository Types](#repository-types)
+  - [Codecommit](#codecommit)
+  - [Github](#github)
+- [Image Push Events](#image-push-events)
+- [Requirements](#requirements)
+- [Providers](#providers)
+- [Modules](#modules)
+- [Resources](#resources)
+- [Inputs](#inputs)
+- [Outputs](#outputs)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
-
-# terraform-aws-gitops-updater <!-- omit in toc -->
 
 Terraform module that creates a codebuild pipeline triggered by push on ECR registries.
 
