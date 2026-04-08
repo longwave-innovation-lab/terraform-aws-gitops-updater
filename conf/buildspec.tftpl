@@ -1,0 +1,59 @@
+version: 0.2
+
+env:
+  variables:
+    # Image name and image tag are set by the lambda that triggers this project
+    IMAGE_NAME: ""
+    IMAGE_TAG: ""
+
+phases:
+  pre_build:
+    commands:
+      - echo 'Pre_build_phase'
+      - aws --version
+      - python --version
+      - pip --version
+      - git --version
+%{~ if git_service_provider == git_services.codecommit }
+
+      - echo 'Installing git-remote-codecommit...'
+      - pip install git-remote-codecommit
+      - REPO_URL="codecommit::$AWS_REGION://$GITOPS_REPO_NAME"
+%{~ endif }
+%{~ if git_service_provider == git_services.github }
+
+      - echo 'Installing gh-app-auth...'
+      - pip install https://github.com/Longwave-innovation/gh-app-auth/releases/download/v0.2.0/gh_app_auth-0.2.0-py3-none-any.whl
+      - echo "$GITHUB_APP_PRIVATE_KEY" > private_key.pem
+      - |
+        REPO_URL=$(gh-app-auth configure-git \
+          --app-id $GITHUB_APP_ID \
+          --installation-id $GITHUB_APP_INSTALLATION_ID \
+          --private-key private_key.pem \
+          --repo-owner $GITOPS_REPO_OWNER \
+          --repo-name $GITOPS_REPO_NAME)
+%{~ endif }
+%{~ if git_service_provider == git_services.generic }
+
+      - REPO_URL="https://oauth2:$GIT_ACCESS_TOKEN@$GIT_SERVER_URL/$GITOPS_REPO_OWNER/$GITOPS_REPO_NAME.git"
+%{~ endif }
+
+      - echo "Going to clone <$REPO_URL>"
+      - git config --global user.email "$GIT_MAIL"
+      - git config --global user.name "$GIT_USERNAME"
+
+  build:
+    commands:
+      - echo 'Build_phase'
+      - echo "Updating image <$IMAGE_NAME> to tag <$IMAGE_TAG>..."
+      - git clone --depth 1 --branch main "$REPO_URL"
+      - cd $GITOPS_REPO_NAME
+      - pip install -r requirements.txt
+      - python image_tag_updater.py -i $IMAGE_NAME -t $IMAGE_TAG -c image_tag_mappings.json
+      - git add *
+      - git commit -m "Automatic Pipeline - Updated image $IMAGE_NAME to version $IMAGE_TAG"
+      - git push
+
+  post_build:
+    commands:
+      - echo 'Post_build_phase'
