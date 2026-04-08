@@ -1,5 +1,7 @@
 # Generate me a terraform doc config file for this terraform module
 formatter: "markdown table"
+settings:
+  escape: true
 # settings:
 #   lockfile: false
 footer-from: ""

@@ -29,37 +29,52 @@ variable "lambda_triggerer_name" {
 
 variable "repo_name" {
   type        = string
-  description = "Name of therepository which will be updated by the pipeline"
+  description = "Name of the repository/project which will be updated by the pipeline"
 }
 
 variable "repo_owner" {
   type        = string
-  description = "Owner of the repository that will be updated by the pipeline"
+  description = "Owner/Organization/Group of the repository/project that will be updated by the pipeline"
   default     = null
 }
 
-variable "is_codecommit_repo" {
-  type        = bool
-  default     = true
-  description = "Whether the repo is a codecommit repo or not"
+variable "git_service_provider" {
+  type = string
+  validation {
+    condition     = contains(local.all_git_services, var.git_service_provider)
+    error_message = "Invalid git service provider. Available values: CodeCommit, GitHub, Generic."
+  }
+  description = "Git service provider. Available values: CodeCommit, GitHub, Generic. CodeCommit will use AWS role permission to access if in the same account, Github will use App authentication, Generic will use a git access token. The last two options require the repository to be accessible from the public internet or through a VPC endpoint."
 }
 
 variable "github_app_id_parameter" {
   default     = null
   type        = string
-  description = "SSM parameter name for the GitHub App ID. Only required when repository is on Github."
+  description = "SSM parameter name for the GitHub App ID. Only required when `git_service_provider` is set to `GitHub`."
 }
 
 variable "github_app_installation_id_parameter" {
   default     = null
   type        = string
-  description = "SSM parameter name for the GitHub App Installation ID. Only required when repository is on Github."
+  description = "SSM parameter name for the GitHub App Installation ID. Only required when `git_service_provider` is set to `GitHub`."
 }
 
 variable "github_app_private_key_parameter" {
   default     = null
   type        = string
-  description = "SSM parameter name for the GitHub App Private Key. Only required when repository is on Github."
+  description = "SSM parameter name for the GitHub App Private Key. Only required when `git_service_provider` is set to `GitHub`."
+}
+
+variable "git_access_token_parameter" {
+  default     = null
+  type        = string
+  description = "SSM parameter name for a Git access token. Required when `git_service_provider` is set to `Generic`. Ignored otherwise."
+}
+
+variable "git_server_hostname" {
+  default     = null
+  type        = string
+  description = "Git server hostname without scheme (e.g., `git.example.com`). Required when `git_service_provider` is set to `Generic`. Ignored otherwise."
 }
 
 variable "codebuild_project_name" {
