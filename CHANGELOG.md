@@ -1,3 +1,10 @@
+## [5.0.1](https://github.com/longwave-innovation-lab/terraform-aws-gitops-updater/compare/v5.0.0...v5.0.1) (2026-04-15)
+
+
+### Bug Fixes
+
+* resolution of env var in buildspec ([880f53c](https://github.com/longwave-innovation-lab/terraform-aws-gitops-updater/commit/880f53c9356b55c1e6403e848472fe7308888165))
+
 ## [5.0.0](https://github.com/longwave-innovation-lab/terraform-aws-gitops-updater/compare/v4.2.3...v5.0.0) (2026-04-08)
 
 
@@ -29,11 +36,4 @@
 * updated to new standard for terraform template ([b2e5af8](https://github.com/longwave-innovation-lab/terraform-aws-gitops-updater/commit/b2e5af805f90d45cbb79cbcb6c510e0b6045b51b))
 
 ## [4.2.1](https://github.com/longwave-innovation-lab/terraform-aws-gitops-updater/compare/v4.2.0...v4.2.1) (2025-10-31)
-
-## [4.2.0](https://github.com/longwave-innovation-lab/terraform-aws-gitops-updater/compare/v4.1.1...v4.2.0) (2025-10-30)
-
-
-### Features
-
-* added regex pattern to void triggers on specific tags closes [#19](https://github.com/longwave-innovation-lab/terraform-aws-gitops-updater/issues/19) ([83ce269](https://github.com/longwave-innovation-lab/terraform-aws-gitops-updater/commit/83ce26988417f23ad263b0e7b5fc9104dc4c546e))
 
