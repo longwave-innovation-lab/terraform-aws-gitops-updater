@@ -49,7 +49,7 @@ phases:
       - git clone --depth 1 --branch main "$REPO_URL"
       - cd $GITOPS_REPO_NAME
       - pip install -r requirements.txt
-      - python image_tag_updater.py -i $IMAGE_NAME -t $IMAGE_TAG -c image_tag_mappings.json
+      - python image_tag_updater.py -i "$IMAGE_NAME" -t "$IMAGE_TAG" -c image_tag_mappings.json
       - git add *
       - git commit -m "Automatic Pipeline - Updated image $IMAGE_NAME to version $IMAGE_TAG"
       - git push
