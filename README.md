@@ -86,7 +86,6 @@ By default, this module will **not** trigger when:
 |------|---------|
 | <a name="provider_archive"></a> [archive](#provider\_archive) | >= 2.7.0 |
 | <a name="provider_aws"></a> [aws](#provider\_aws) | >= 6.0.0 |
-| <a name="provider_local"></a> [local](#provider\_local) | n/a |
 | <a name="provider_random"></a> [random](#provider\_random) | n/a |
 
 ## Modules
@@ -102,6 +101,7 @@ No modules.
 | [aws_codebuild_project.cb_project](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/codebuild_project) | resource |
 | [aws_iam_policy.codebuild_default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
 | [aws_iam_policy.codecommit](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
+| [aws_iam_policy.read_generic_token_ssm](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
 | [aws_iam_policy.read_github_app_ssm](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
 | [aws_iam_role.codebuild_role](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
 | [aws_iam_role.lambda_function_role](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
@@ -110,6 +110,7 @@ No modules.
 | [aws_iam_role_policy_attachment.codecommit](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
 | [aws_iam_role_policy_attachment.ecr_lookup_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
 | [aws_iam_role_policy_attachment.lambda_basic_execution](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
+| [aws_iam_role_policy_attachment.read_generic_token_ssm](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
 | [aws_iam_role_policy_attachment.read_github_app_ssm](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
 | [aws_lambda_function.codebuild_triggerer](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lambda_function) | resource |
 | [aws_lambda_permission.allow_eventbridge](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lambda_permission) | resource |
@@ -123,16 +124,17 @@ No modules.
 | [aws_iam_policy_document.codebuild_default_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_iam_policy_document.codecommit](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_iam_policy_document.lambda_function_policy_document](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
+| [aws_iam_policy_document.read_generic_token_ssm](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_iam_policy_document.read_github_app_ssm](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_region.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/region) | data source |
-| [local_file.buildspec](https://registry.terraform.io/providers/hashicorp/local/latest/docs/data-sources/file) | data source |
 
 ## Inputs
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_ecr_registry_triggers"></a> [ecr\_registry\_triggers](#input\_ecr\_registry\_triggers) | List of ECR repositories name which will trigger the pipeline | `list(string)` | n/a | yes |
-| <a name="input_repo_name"></a> [repo\_name](#input\_repo\_name) | Name of therepository which will be updated by the pipeline | `string` | n/a | yes |
+| <a name="input_git_service_provider"></a> [git\_service\_provider](#input\_git\_service\_provider) | Git service provider. Available values: CodeCommit, GitHub, Generic. CodeCommit will use AWS role permission to access if in the same account, Github will use App authentication, Generic will use a git access token. The last two options require the repository to be accessible from the public internet or through a VPC endpoint. | `string` | n/a | yes |
+| <a name="input_repo_name"></a> [repo\_name](#input\_repo\_name) | Name of the repository/project which will be updated by the pipeline | `string` | n/a | yes |
 | <a name="input_build_minutes_timeout"></a> [build\_minutes\_timeout](#input\_build\_minutes\_timeout) | Number of minutes to timeout the build | `number` | `5` | no |
 | <a name="input_codebuild_buildspec_path"></a> [codebuild\_buildspec\_path](#input\_codebuild\_buildspec\_path) | Path to the buildspec file in the source repository | `string` | `"buildspec.yaml"` | no |
 | <a name="input_codebuild_comput_type"></a> [codebuild\_comput\_type](#input\_codebuild\_comput\_type) | Compute type for the CodeBuild project. Available values: BUILD\_GENERAL1\_SMALL, BUILD\_GENERAL1\_MEDIUM, BUILD\_GENERAL1\_LARGE, BUILD\_GENERAL1\_2XLARGE | `string` | `"BUILD_GENERAL1_SMALL"` | no |
@@ -145,12 +147,13 @@ No modules.
 | <a name="input_ecr_ignore_tag_regex"></a> [ecr\_ignore\_tag\_regex](#input\_ecr\_ignore\_tag\_regex) | Regex for tags to ignore. Tags which match this regex will **NOT** trigger the updater. Beware all tags are converted lowercase during checks. | `string` | `"^(latest|cache.*)$"` | no |
 | <a name="input_ecr_image_push_rule_name"></a> [ecr\_image\_push\_rule\_name](#input\_ecr\_image\_push\_rule\_name) | Name of the event rule for ECR image push. | `string` | `"ecr-image-push-rule"` | no |
 | <a name="input_event_rule_target_id"></a> [event\_rule\_target\_id](#input\_event\_rule\_target\_id) | ID of the target for the event rule | `string` | `"InvokeLambdaTriggerer"` | no |
-| <a name="input_github_app_id_parameter"></a> [github\_app\_id\_parameter](#input\_github\_app\_id\_parameter) | SSM parameter name for the GitHub App ID. Only required when repository is on Github. | `string` | `null` | no |
-| <a name="input_github_app_installation_id_parameter"></a> [github\_app\_installation\_id\_parameter](#input\_github\_app\_installation\_id\_parameter) | SSM parameter name for the GitHub App Installation ID. Only required when repository is on Github. | `string` | `null` | no |
-| <a name="input_github_app_private_key_parameter"></a> [github\_app\_private\_key\_parameter](#input\_github\_app\_private\_key\_parameter) | SSM parameter name for the GitHub App Private Key. Only required when repository is on Github. | `string` | `null` | no |
-| <a name="input_is_codecommit_repo"></a> [is\_codecommit\_repo](#input\_is\_codecommit\_repo) | Whether the repo is a codecommit repo or not | `bool` | `true` | no |
+| <a name="input_git_access_token_parameter"></a> [git\_access\_token\_parameter](#input\_git\_access\_token\_parameter) | SSM parameter name for a Git access token. Required when `git_service_provider` is set to `Generic`. Ignored otherwise. | `string` | `null` | no |
+| <a name="input_git_server_hostname"></a> [git\_server\_hostname](#input\_git\_server\_hostname) | Git server hostname without scheme (e.g., `git.example.com`). Required when `git_service_provider` is set to `Generic`. Ignored otherwise. | `string` | `null` | no |
+| <a name="input_github_app_id_parameter"></a> [github\_app\_id\_parameter](#input\_github\_app\_id\_parameter) | SSM parameter name for the GitHub App ID. Only required when `git_service_provider` is set to `GitHub`. | `string` | `null` | no |
+| <a name="input_github_app_installation_id_parameter"></a> [github\_app\_installation\_id\_parameter](#input\_github\_app\_installation\_id\_parameter) | SSM parameter name for the GitHub App Installation ID. Only required when `git_service_provider` is set to `GitHub`. | `string` | `null` | no |
+| <a name="input_github_app_private_key_parameter"></a> [github\_app\_private\_key\_parameter](#input\_github\_app\_private\_key\_parameter) | SSM parameter name for the GitHub App Private Key. Only required when `git_service_provider` is set to `GitHub`. | `string` | `null` | no |
 | <a name="input_lambda_triggerer_name"></a> [lambda\_triggerer\_name](#input\_lambda\_triggerer\_name) | Name of the lambda function which will trigger the pipeline. | `string` | `"ECRPushListener"` | no |
-| <a name="input_repo_owner"></a> [repo\_owner](#input\_repo\_owner) | Owner of the repository that will be updated by the pipeline | `string` | `null` | no |
+| <a name="input_repo_owner"></a> [repo\_owner](#input\_repo\_owner) | Owner/Organization/Group of the repository/project that will be updated by the pipeline | `string` | `null` | no |
 | <a name="input_tags"></a> [tags](#input\_tags) | Tags to apply to all resources | `map(string)` | <pre>{<br/>  "ServiceScope": "Gitops Updater"<br/>}</pre> | no |
 
 ## Outputs
